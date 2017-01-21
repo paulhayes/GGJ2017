@@ -11,6 +11,9 @@ public class RadarGame : MonoBehaviour {
     public AudioSource[] signalSources;
 
     [SerializeField]
+    AudioSource noiseSource;
+
+    [SerializeField]
     GameObject signal, innerRangeLight;
     [SerializeField]
     float signalWorldRange;
@@ -58,7 +61,7 @@ public class RadarGame : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        Debug.Log(innerRangeTimer);
+        //Debug.Log(innerRangeTimer);
         xAxis = Input.GetAxis("Horizontal");
         yAxis = Input.GetAxis("Vertical");
         zAxis = Input.GetAxisRaw("Z Axis");
@@ -87,6 +90,12 @@ public class RadarGame : MonoBehaviour {
         for (int i = 0; i < signals.Length; i++)
         {
             float strength = 0;
+
+            Debug.Log(PlayerShip.position);
+
+            if (Vector3.Distance(PlayerShip.position, signals[i].signalPosition) > signalWorldRange)
+                continue;
+
             DetectorInOuterRange(signals[i], ref strength);
 
             if (strength > 0)
@@ -98,7 +107,7 @@ public class RadarGame : MonoBehaviour {
             }
             totalStrength += strength;
 
-            anySignalInnerRange |= DetectorInInnerRange(signals[i]);
+            anySignalInnerRange |= (DetectorInInnerRange(signals[i]) && !signals[i].discovered);
         }
 
         if (anySignalInnerRange)
@@ -111,8 +120,8 @@ public class RadarGame : MonoBehaviour {
             ResetInnerRangeTimer();
         }
             
-
         float staticVolume = 1 - totalStrength;
+        noiseSource.volume = staticVolume;
         //Debug.Log(staticVolume);
     }
 
@@ -135,6 +144,10 @@ public class RadarGame : MonoBehaviour {
         float distance = Vector3.Distance(detectorPos, signalPos);
         if (distance <= signal.innerRange)
         {
+            if (innerRangeTimer <= 0)
+            {
+                signal.discovered = true;
+            }
             return true;
         }
         return false;
