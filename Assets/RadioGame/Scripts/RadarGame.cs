@@ -89,6 +89,9 @@ public class RadarGame : MonoBehaviour {
         float totalStrength = 0;
         bool anySignalInnerRange = false;
         bool anySignalOuterRange = false;
+        Signal strongestSignal = null;
+        float strongestSignalStrength = 0;
+
         for (int i = 0; i < signals.Length; i++)
         {
             float strength = 0;
@@ -96,40 +99,47 @@ public class RadarGame : MonoBehaviour {
             if (Vector3.Distance(PlayerShip.position, signals[i].signalPosition) > signalWorldRange)
                 continue;
 
-            anySignalInnerRange |= (DetectorInInnerRange(signals[i]) && !signals[i].discovered);
+            anySignalInnerRange |= (DetectorInInnerRange(signals[i]));
 
-            anySignalOuterRange |= (DetectorInOuterRange(signals[i], ref strength) && !signals[i].discovered);
+            anySignalOuterRange |= (DetectorInOuterRange(signals[i], ref strength));
+            if (strength >= strongestSignalStrength)
+            {
+                strongestSignal = signals[i];
+                strongestSignalStrength = strength;
+            }
 
             Debug.Log(strength);
 
-            if (/*!signals[i].discovered*/ true)
+            if (strength > 0)
             {
-                if (strength > 0)
-                {
-                    signalSources[i].volume = signals[i].maxClipVolume * strength;
-                }
-                else
-                {
-                    signalSources[i].volume = 0;
-                }
-                totalStrength += strength;
-            } else
+                signalSources[i].volume = signals[i].maxClipVolume * strength;
+            }
+            else
             {
                 signalSources[i].volume = 0;
             }
+            totalStrength += strength;
 
+        }
+
+        if (!strongestSignal.discovered) {
+            if (anySignalInnerRange)
+            {
+                DecreaseInnerRangeTimer();
+            }
+            else {
+                ResetInnerRangeTimer();
+            }
         }
 
         if (anySignalInnerRange)
         {
             innerRangeLight.GetComponent<MeshRenderer>().sharedMaterial.color = new Color(0, 1, 0);
-            DecreaseInnerRangeTimer();
         } else if (anySignalOuterRange) {
             innerRangeLight.GetComponent<MeshRenderer>().sharedMaterial.color = new Color(1, 0.65f, 0);
         } else
         {
             innerRangeLight.GetComponent<MeshRenderer>().sharedMaterial.color = new Color(1, 0, 0);
-            ResetInnerRangeTimer();
         }
             
         float staticVolume = 1 - totalStrength;
@@ -159,6 +169,7 @@ public class RadarGame : MonoBehaviour {
             if (innerRangeTimer <= 0)
             {
                 signal.discovered = true;
+                OnTimerFinish();
             }
             return true;
         }
@@ -189,6 +200,11 @@ public class RadarGame : MonoBehaviour {
     void ResetInnerRangeTimer ()
     {
         innerRangeTimer = innerRangeTimerLength;
+    }
+
+    void OnTimerFinish ()
+    {
+        ResetInnerRangeTimer();
     }
 
     void SetTimerSliderSize ()
