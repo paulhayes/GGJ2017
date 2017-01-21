@@ -83,10 +83,11 @@ public class RadarGame : MonoBehaviour {
         SetTimerSliderSize();
     }
 
-    void GetSignalStrengths ()
+    void GetSignalStrengths()
     {
         float totalStrength = 0;
         bool anySignalInnerRange = false;
+        bool anySignalOuterRange = false;
         for (int i = 0; i < signals.Length; i++)
         {
             float strength = 0;
@@ -98,7 +99,7 @@ public class RadarGame : MonoBehaviour {
 
             anySignalInnerRange |= (DetectorInInnerRange(signals[i]) && !signals[i].discovered);
 
-            DetectorInOuterRange(signals[i], ref strength);
+            anySignalOuterRange |= (DetectorInOuterRange(signals[i], ref strength) && !signals[i].discovered);
 
             if (!signals[i].discovered)
             {
@@ -115,13 +116,15 @@ public class RadarGame : MonoBehaviour {
             {
                 signalSources[i].Stop();
             }
-            
+
         }
 
         if (anySignalInnerRange)
         {
             innerRangeLight.GetComponent<MeshRenderer>().sharedMaterial.color = new Color(0, 1, 0);
             DecreaseInnerRangeTimer();
+        } else if (anySignalOuterRange) {
+            innerRangeLight.GetComponent<MeshRenderer>().sharedMaterial.color = new Color(1, 0.65f, 0);
         } else
         {
             innerRangeLight.GetComponent<MeshRenderer>().sharedMaterial.color = new Color(1, 0, 0);
