@@ -52,6 +52,7 @@ public class RadarGame : MonoBehaviour {
             if (signals[i].clip != null) {
                 signalSources[i].clip = signals[i].clip;
                 signalSources[i].loop = true;
+                signalSources[i].volume = signals[i].maxClipVolume;
                 signalSources[i].Play();
             }
         }
@@ -92,8 +93,6 @@ public class RadarGame : MonoBehaviour {
         {
             float strength = 0;
 
-            Debug.Log(PlayerShip.position);
-
             if (Vector3.Distance(PlayerShip.position, signals[i].signalPosition) > signalWorldRange)
                 continue;
 
@@ -101,11 +100,13 @@ public class RadarGame : MonoBehaviour {
 
             anySignalOuterRange |= (DetectorInOuterRange(signals[i], ref strength) && !signals[i].discovered);
 
-            if (!signals[i].discovered)
+            Debug.Log(strength);
+
+            if (/*!signals[i].discovered*/ true)
             {
                 if (strength > 0)
                 {
-                    signalSources[i].volume = strength;
+                    signalSources[i].volume = signals[i].maxClipVolume * strength;
                 }
                 else
                 {
@@ -114,7 +115,7 @@ public class RadarGame : MonoBehaviour {
                 totalStrength += strength;
             } else
             {
-                signalSources[i].Stop();
+                signalSources[i].volume = 0;
             }
 
         }

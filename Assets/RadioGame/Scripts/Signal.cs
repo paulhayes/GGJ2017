@@ -13,4 +13,6 @@ public class Signal {
 
     public bool discovered;
     public AudioClip clip;
+    [Range(0, 1)]
+    public float maxClipVolume = 1f;
 }
