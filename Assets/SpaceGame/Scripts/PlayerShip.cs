@@ -74,7 +74,14 @@ public class PlayerShip : MonoBehaviour {
     {
         float thrustInput = Mathf.Clamp01(Input.GetAxis("Z Axis"));
         body.AddForce(thrust * body.transform.forward * thrustInput );
-
+        /*
+        if (thrustInput == 0 && thrustNoise.isPlaying) {
+            thrustNoise.Stop();
+        }
+        if (thrustInput > 0 && !thrustNoise.isPlaying) {
+            thrustNoise.Play();
+        }
+        */
         thrustNoise.volume = thrustInput;
 
         //body.AddTorque(thrustRotation * Input.GetAxis("Horizontal") * Vector3.up );
@@ -123,13 +130,14 @@ public class PlayerShip : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        float mag = collision.impactForceSum.magnitude;
+        float mag = collision.relativeVelocity.magnitude;
+        float mass = collision.collider.attachedRigidbody.mass;
         Debug.Log(mag);
         for (int i = 0; i < collisionsSounds.Length; i++) {
-            if (mag <= collisionsSounds[i].impactThreshold) {
-                collisionsSounds[i].lastIndex += Random.Range(0, collisionsSounds[i].clips.Length-1);
-                collisionsSounds[i].lastIndex %= collisionsSounds[i].clips.Length;
-                collisionAudioSource.PlayOneShot(collisionsSounds[i].clips[collisionsSounds[i].lastIndex], 1f);
+            if (mass <= collisionsSounds[i].impactThreshold) {
+                collisionsSounds[i].lastIndex = (collisionsSounds[i].lastIndex + Random.Range(1, collisionsSounds[i].clips.Length-1) ) % collisionsSounds[i].clips.Length;
+                Debug.Log(collisionsSounds[i].clips[collisionsSounds[i].lastIndex].name);
+                collisionAudioSource.PlayOneShot(collisionsSounds[i].clips[collisionsSounds[i].lastIndex], Mathf.Clamp01(mag/2f));
                 break;
             }
 
