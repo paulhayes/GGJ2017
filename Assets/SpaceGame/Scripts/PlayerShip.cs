@@ -32,7 +32,7 @@ public class PlayerShip : MonoBehaviour {
             mapMode = !mapMode;
         }
 
-        thrustParticles.emission.enabled = Input.GetAxis("Z Axis")>0;
+        //thrustParticles.emission.enabled = Input.GetAxis("Z Axis")>0;
         
 
         CameraPos();

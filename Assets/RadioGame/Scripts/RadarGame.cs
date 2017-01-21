@@ -7,7 +7,11 @@ public class RadarGame : MonoBehaviour {
     public Signal[] signals;
 
     [SerializeField]
+    GameObject signal;
+
+    [SerializeField]
     GameObject armPivot, detector;
+    float armAngle;
 
     [SerializeField]
     float detectorSpeed, detectorMinY, detectorMaxY;
@@ -19,6 +23,7 @@ public class RadarGame : MonoBehaviour {
     // Use this for initialization
     void Start() {
         //detector = armPivot.transform.FindChild("Detector").gameObject;
+        PlaceSignals();
     }
 
     // Update is called once per frame
@@ -27,11 +32,11 @@ public class RadarGame : MonoBehaviour {
         yAxis = Input.GetAxis("Vertical");
         zAxis = Input.GetAxis("Z Axis");
 
-        if (Mathf.Abs(xAxis) >= 0.2f || Mathf.Abs(yAxis) >= 0.2f)
+        if (Mathf.Abs(xAxis) >= 0.1f || Mathf.Abs(yAxis) >= 0.1f)
         {
             ShowArm();
             SetArmAngle();
-            MoveDetector();
+            SetDetectorPos();
 
         } else
         {
@@ -42,10 +47,40 @@ public class RadarGame : MonoBehaviour {
         
     }
 
+    void PlaceSignals ()
+    {
+        for (int i = 0; i < signals.Length; i++)
+        {
+            Vector3 signalPos = signals[i].position.position;
+            GameObject newSignal = Instantiate(signal, signalPos, Quaternion.identity) as GameObject;
+            newSignal.transform.GetChild(0).localScale = new Vector3(signals[i].innerRange, 0.1f, signals[i].innerRange);
+            newSignal.transform.GetChild(1).localScale = new Vector3(signals[i].outerRange, 0.1f, signals[i].outerRange);
+        }
+    }
+
+    /*bool DetectorInInnerRange (Signal signal)
+    {
+        float x = Mathf.Sin(armAngle);
+
+        //return true;
+    }*/
+
+    bool DetectorInOuterRange(Signal signal)
+    {
+        if (true)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     void SetArmAngle()
     {
-        float angle = (Mathf.Atan2(yAxis, xAxis) * Mathf.Rad2Deg) - 90f;
-        armPivot.transform.localRotation = Quaternion.Euler(armPivot.transform.localRotation.x, armPivot.transform.localRotation.y, angle);
+        armAngle = (Mathf.Atan2(yAxis, xAxis) * Mathf.Rad2Deg) - 90f;
+        armPivot.transform.localRotation = Quaternion.Euler(armPivot.transform.localRotation.x, armPivot.transform.localRotation.y, armAngle);
     }
 
     void ShowArm ()
@@ -58,16 +93,9 @@ public class RadarGame : MonoBehaviour {
         armPivot.SetActive(false);
     }
 
-    void MoveDetector ()
+    void SetDetectorPos ()
     {
         Vector3 detectorPos = detector.transform.localPosition;
-        /*if (zAxis > 0 && detectorPos.y <= detectorMaxY)
-        {
-            detector.transform.localPosition = new Vector3(detectorPos.x, detectorPos.y + zAxis * detectorSpeed, detectorPos.z);
-        } else if (zAxis < 0 && detectorPos.y >= detectorMinY)
-        {
-            detector.transform.Translate(armPivot.transform.up * zAxis * detectorSpeed * Time.deltaTime);
-        }*/
         if (zAxis >= 0)
             detector.transform.localPosition = new Vector3(detectorPos.x, detectorMinY + (zAxis * detectorMaxY * 2), detectorPos.z);
     }
