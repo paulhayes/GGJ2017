@@ -38,9 +38,9 @@ public class DebrisPool : MonoBehaviour {
         Bounds box = spawnBox.bounds;
         float xSign = Mathf.Sign(ship.body.velocity.x);
         float zSign = Mathf.Sign(ship.body.velocity.z);
-        bool xBigger = Mathf.Abs(ship.body.velocity.normalized.x) > Random.value ;
+        bool spawnSide = Mathf.Abs(ship.body.velocity.normalized.x) > Random.value ;
 
-        Vector3 pos = new Vector3(xSign * Random.Range(!xBigger ? -box.extents.x : outerSpawnRing* box.extents.x, box.extents.x), Random.Range(-box.extents.y, box.extents.y), zSign*Random.Range(xBigger?-box.extents.z: outerSpawnRing * box.extents.z, box.extents.z));
+        Vector3 pos = new Vector3(xSign * Random.Range(!spawnSide ? -box.extents.x : outerSpawnRing* box.extents.x, box.extents.x), Random.Range(-box.extents.y, box.extents.y), zSign*Random.Range(spawnSide?-box.extents.z: outerSpawnRing * box.extents.z, box.extents.z));
         /*
         if (!xBigger && Mathf.Abs(pos.x) < (outerSpawnRing*box.extents.x)) {
             pos.x = Mathf.Sign(pos.x) * outerSpawnRing *  box.extents.x;

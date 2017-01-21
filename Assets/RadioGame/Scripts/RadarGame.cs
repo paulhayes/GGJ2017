@@ -1,39 +1,70 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RadarGame : MonoBehaviour {
 
+    #region Declaring variables
+    [Header("Signals")]
     public Signal[] signals;
+    public AudioSource[] signalSources;
 
     [SerializeField]
-    GameObject signal;
+    AudioSource noiseSource;
 
     [SerializeField]
-    float signalRange;
+    GameObject signal, innerRangeLight;
+    [SerializeField]
+    float signalWorldRange;
 
+    [Header("Radar arm & detector")]
     [SerializeField]
     GameObject armPivot, detector;
-    float armAngle;
 
     [SerializeField]
     float detectorSpeed, detectorMinY, detectorMaxY;
 
+    [Header("Inner Range Timer")]
+    [SerializeField]
+    float innerRangeTimerLength;
+    float innerRangeTimer;
+
+    [SerializeField]
+    RectTransform timerSlider;
+
+    float armAngle;
+
     float xAxis;
     float yAxis;
     float zAxis;
+    #endregion
 
     // Use this for initialization
     void Start() {
-        //detector = armPivot.transform.FindChild("Detector").gameObject;
         PlaceSignals();
+
+        signalSources = new AudioSource[signals.Length];
+        for (int i = 0; i < signals.Length; i++)
+        {
+            GameObject sourceObj = new GameObject("Signal Source " + i.ToString());
+            signalSources[i] = sourceObj.AddComponent<AudioSource>();
+            if (signals[i].clip != null) {
+                signalSources[i].clip = signals[i].clip;
+                signalSources[i].loop = true;
+                signalSources[i].Play();
+            }
+        }
+
+        ResetInnerRangeTimer();
     }
 
     // Update is called once per frame
     void Update() {
+        //Debug.Log(innerRangeTimer);
         xAxis = Input.GetAxis("Horizontal");
         yAxis = Input.GetAxis("Vertical");
-        zAxis = Input.GetAxis("Z Axis");
+        zAxis = Input.GetAxisRaw("Z Axis");
 
         if (Mathf.Abs(xAxis) >= 0.1f || Mathf.Abs(yAxis) >= 0.1f)
         {
@@ -46,13 +77,60 @@ public class RadarGame : MonoBehaviour {
             HideArm();
         }
 
+        if (signals.Length > 0 && signalSources.Length > 0)
+            GetSignalStrengths();
+
+        SetTimerSliderSize();
+    }
+
+    void GetSignalStrengths ()
+    {
+        float totalStrength = 0;
+        bool anySignalInnerRange = false;
         for (int i = 0; i < signals.Length; i++)
         {
-            DetectorInOuterRange(signals[i]);
-            DetectorInInnerRange(signals[i]);
+            float strength = 0;
+
+            Debug.Log(PlayerShip.position);
+
+            if (Vector3.Distance(PlayerShip.position, signals[i].signalPosition) > signalWorldRange)
+                continue;
+
+            anySignalInnerRange |= (DetectorInInnerRange(signals[i]) && !signals[i].discovered);
+
+            DetectorInOuterRange(signals[i], ref strength);
+
+            if (!signals[i].discovered)
+            {
+                if (strength > 0)
+                {
+                    signalSources[i].volume = strength;
+                }
+                else
+                {
+                    signalSources[i].volume = 0;
+                }
+                totalStrength += strength;
+            } else
+            {
+                signalSources[i].Stop();
+            }
+            
         }
 
-        Debug.Log(DetectorInOuterRange(signals[0]).ToString() + ", " + DetectorInInnerRange(signals[0]).ToString());
+        if (anySignalInnerRange)
+        {
+            innerRangeLight.GetComponent<MeshRenderer>().sharedMaterial.color = new Color(0, 1, 0);
+            DecreaseInnerRangeTimer();
+        } else
+        {
+            innerRangeLight.GetComponent<MeshRenderer>().sharedMaterial.color = new Color(1, 0, 0);
+            ResetInnerRangeTimer();
+        }
+            
+        float staticVolume = 1 - totalStrength;
+        noiseSource.volume = staticVolume;
+        //Debug.Log(staticVolume);
     }
 
     void PlaceSignals ()
@@ -74,24 +152,44 @@ public class RadarGame : MonoBehaviour {
         float distance = Vector3.Distance(detectorPos, signalPos);
         if (distance <= signal.innerRange)
         {
+            if (innerRangeTimer <= 0)
+            {
+                signal.discovered = true;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    bool DetectorInOuterRange(Signal signal, ref float strength)
+    {
+        Vector3 detectorPos = new Vector3(detector.transform.position.x, detector.transform.position.y, 0);
+        Vector3 signalPos = new Vector3(signal.frequency.position.x, signal.frequency.position.y, 0);
+
+        float distance = Vector3.Distance(detectorPos, signalPos);
+        if (distance <= signal.outerRange)
+        {
+            strength = Mathf.InverseLerp(signal.outerRange, signal.innerRange, distance);
             return true;
         }
 
         return false;
     }
 
-    bool DetectorInOuterRange(Signal signal)
+    void DecreaseInnerRangeTimer ()
     {
-        Vector3 detectorPos = new Vector3(detector.transform.position.x, detector.transform.position.y, 0);
-        Vector3 signalPos = new Vector3(signal.frequency.position.x, signal.frequency.position.y, 0);
+        if(innerRangeTimer >= 0)
+            innerRangeTimer -= Time.deltaTime;
+    }
 
-        float distance = Vector3.Distance(detectorPos, signalPos);
-        if (distance <= signal.outerRange && distance > signal.innerRange)
-        {
-            return true;
-        }
+    void ResetInnerRangeTimer ()
+    {
+        innerRangeTimer = innerRangeTimerLength;
+    }
 
-        return false;
+    void SetTimerSliderSize ()
+    {
+        timerSlider.localScale = new Vector2(1 - ((1 / innerRangeTimerLength) * innerRangeTimer), 1);
     }
 
     void SetArmAngle()

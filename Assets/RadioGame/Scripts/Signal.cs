@@ -6,11 +6,11 @@ using UnityEngine;
 public class Signal {
 
     public Transform frequency;
+    public Vector3 signalPosition = Vector3.zero;
 
     public float outerRange, innerRange;
-    float time;
+    //float time;
 
+    public bool discovered;
     public AudioClip clip;
-
-    public Vector3 signalPosition = Vector3.zero;
 }
