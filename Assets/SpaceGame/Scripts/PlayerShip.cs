@@ -12,6 +12,19 @@ public class PlayerShip : MonoBehaviour {
     public ParticleSystem thrustParticles;
     public ParticleSystem[] steeringThruster;
     public Rigidbody body;
+    public AudioSource collisionAudioSource;
+    public AudioSource thrustNoise;
+
+
+    [System.Serializable]
+    public class CollisionSound {
+        public float impactThreshold;
+        public AudioClip[] clips;
+        [HideInInspector]
+        public int lastIndex;
+    }
+
+    public CollisionSound[] collisionsSounds;
 
     public bool mapMode;
     public float zoomInPos = 0;
@@ -28,6 +41,8 @@ public class PlayerShip : MonoBehaviour {
     public float cameraEase;
     ParticleSystem.EmissionModule emissions;
     ParticleSystem.EmissionModule[] steeringEmitters;
+
+
 
 	void Start () {
         emissions = thrustParticles.emission;
@@ -57,7 +72,11 @@ public class PlayerShip : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        body.AddForce(thrust * body.transform.forward * Mathf.Clamp01(Input.GetAxis("Z Axis")) );
+        float thrustInput = Mathf.Clamp01(Input.GetAxis("Z Axis"));
+        body.AddForce(thrust * body.transform.forward * thrustInput );
+
+        thrustNoise.volume = thrustInput;
+
         //body.AddTorque(thrustRotation * Input.GetAxis("Horizontal") * Vector3.up );
         Vector3 rotThrust = Vector3.zero;
         if (Input.GetAxis("Horizontal") != 0)
@@ -92,12 +111,29 @@ public class PlayerShip : MonoBehaviour {
         blurFX.enabled = Mathf.InverseLerp(zoomInPos, zoomOutPos, pos.y) < threshold;
         mainCamera.enabled = Mathf.InverseLerp(zoomInPos, zoomOutPos, pos.y) < threshold;
 
-        pos.x += Time.deltaTime * cameraEase * (ship.position.x - pos.x);
-        pos.z += Time.deltaTime * cameraEase * (ship.position.z - pos.z);
+        //float zoom = Mathf.InverseLerp(zoomOutPos, zoomInPos, pos.y);
+        //Time.timeScale = zoom;
+
+        pos.x += Time.unscaledDeltaTime * cameraEase * (ship.position.x - pos.x);
+        pos.z += Time.unscaledDeltaTime * cameraEase * (ship.position.z - pos.z);
 
         playerCameras.position = pos;
 
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        float mag = collision.impactForceSum.magnitude;
+        Debug.Log(mag);
+        for (int i = 0; i < collisionsSounds.Length; i++) {
+            if (mag <= collisionsSounds[i].impactThreshold) {
+                collisionsSounds[i].lastIndex += Random.Range(0, collisionsSounds[i].clips.Length-1);
+                collisionsSounds[i].lastIndex %= collisionsSounds[i].clips.Length;
+                collisionAudioSource.PlayOneShot(collisionsSounds[i].clips[collisionsSounds[i].lastIndex], 1f);
+                break;
+            }
+
+        }
+    }
 
 }
