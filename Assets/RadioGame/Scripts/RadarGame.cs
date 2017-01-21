@@ -10,6 +10,9 @@ public class RadarGame : MonoBehaviour {
     GameObject signal;
 
     [SerializeField]
+    float signalRange;
+
+    [SerializeField]
     GameObject armPivot, detector;
     float armAngle;
 
@@ -43,38 +46,52 @@ public class RadarGame : MonoBehaviour {
             HideArm();
         }
 
-        Debug.Log(zAxis);
-        
+        for (int i = 0; i < signals.Length; i++)
+        {
+            DetectorInOuterRange(signals[i]);
+            DetectorInInnerRange(signals[i]);
+        }
+
+        Debug.Log(DetectorInOuterRange(signals[0]).ToString() + ", " + DetectorInInnerRange(signals[0]).ToString());
     }
 
     void PlaceSignals ()
     {
         for (int i = 0; i < signals.Length; i++)
         {
-            Vector3 signalPos = signals[i].position.position;
+            Vector3 signalPos = signals[i].frequency.position;
             GameObject newSignal = Instantiate(signal, signalPos, Quaternion.identity) as GameObject;
-            newSignal.transform.GetChild(0).localScale = new Vector3(signals[i].innerRange, 0.1f, signals[i].innerRange);
-            newSignal.transform.GetChild(1).localScale = new Vector3(signals[i].outerRange, 0.1f, signals[i].outerRange);
+            newSignal.transform.GetChild(0).localScale = new Vector3(signals[i].innerRange*2, 0.1f, signals[i].innerRange*2);
+            newSignal.transform.GetChild(1).localScale = new Vector3(signals[i].outerRange*2, 0.1f, signals[i].outerRange*2);
         }
     }
 
-    /*bool DetectorInInnerRange (Signal signal)
+    bool DetectorInInnerRange (Signal signal)
     {
-        float x = Mathf.Sin(armAngle);
+        Vector3 detectorPos = new Vector3(detector.transform.position.x, detector.transform.position.y, 0);
+        Vector3 signalPos = new Vector3(signal.frequency.position.x, signal.frequency.position.y, 0);
 
-        //return true;
-    }*/
-
-    bool DetectorInOuterRange(Signal signal)
-    {
-        if (true)
+        float distance = Vector3.Distance(detectorPos, signalPos);
+        if (distance <= signal.innerRange)
         {
             return true;
         }
-        else
+
+        return false;
+    }
+
+    bool DetectorInOuterRange(Signal signal)
+    {
+        Vector3 detectorPos = new Vector3(detector.transform.position.x, detector.transform.position.y, 0);
+        Vector3 signalPos = new Vector3(signal.frequency.position.x, signal.frequency.position.y, 0);
+
+        float distance = Vector3.Distance(detectorPos, signalPos);
+        if (distance <= signal.outerRange && distance > signal.innerRange)
         {
-            return false;
+            return true;
         }
+
+        return false;
     }
 
     void SetArmAngle()
