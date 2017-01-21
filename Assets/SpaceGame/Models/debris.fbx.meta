@@ -1,0 +1,167 @@
+fileFormatVersion: 2
+guid: a62aae40e3f9353429670c8969def69d
+timeCreated: 1485039642
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Body
+    100002: Bolt
+    100004: Cylinder
+    100006: //RootNode
+    100008: Debris Cube 1
+    100010: Debris Cube 2
+    100012: Engine Bit
+    100014: Gear 1
+    100016: Gear 2
+    100018: Hull Plate 1
+    100020: Hull Plate 1.001
+    100022: Hull Plate 2
+    100024: Nut
+    100026: Shard 1
+    100028: Shard 2
+    100030: Shard 3
+    100032: Shard 4
+    100034: Shard 5
+    100036: Torus Knot
+    400000: Body
+    400002: Bolt
+    400004: Cylinder
+    400006: //RootNode
+    400008: Debris Cube 1
+    400010: Debris Cube 2
+    400012: Engine Bit
+    400014: Gear 1
+    400016: Gear 2
+    400018: Hull Plate 1
+    400020: Hull Plate 1.001
+    400022: Hull Plate 2
+    400024: Nut
+    400026: Shard 1
+    400028: Shard 2
+    400030: Shard 3
+    400032: Shard 4
+    400034: Shard 5
+    400036: Torus Knot
+    2300000: Body
+    2300002: Bolt
+    2300004: Cylinder
+    2300006: Debris Cube 1
+    2300008: Debris Cube 2
+    2300010: Engine Bit
+    2300012: Gear 1
+    2300014: Gear 2
+    2300016: Hull Plate 1
+    2300018: Hull Plate 1.001
+    2300020: Hull Plate 2
+    2300022: Nut
+    2300024: Shard 1
+    2300026: Shard 2
+    2300028: Shard 3
+    2300030: Shard 4
+    2300032: Shard 5
+    2300034: Torus Knot
+    3300000: Body
+    3300002: Bolt
+    3300004: Cylinder
+    3300006: Debris Cube 1
+    3300008: Debris Cube 2
+    3300010: Engine Bit
+    3300012: Gear 1
+    3300014: Gear 2
+    3300016: Hull Plate 1
+    3300018: Hull Plate 1.001
+    3300020: Hull Plate 2
+    3300022: Nut
+    3300024: Shard 1
+    3300026: Shard 2
+    3300028: Shard 3
+    3300030: Shard 4
+    3300032: Shard 5
+    3300034: Torus Knot
+    4300000: Gear 2
+    4300002: Gear 1
+    4300004: Shard 5
+    4300006: Torus Knot
+    4300008: Nut
+    4300010: Bolt
+    4300012: Hull Plate 1.001
+    4300014: Hull Plate 2
+    4300016: Body
+    4300018: Shard 4
+    4300020: Shard 3
+    4300022: Shard 2
+    4300024: Shard 1
+    4300026: Hull Plate 1
+    4300028: Cylinder
+    4300030: Engine Bit
+    4300032: Debris Cube 2
+    4300034: Debris Cube 1
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
