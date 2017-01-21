@@ -5,8 +5,10 @@ using UnityEngine;
 [System.Serializable]
 public class Signal {
 
-    Transform position;
-    float outerRange, innerRange;
-    AudioClip clip;
+    public Transform position;
+
+    public float outerRange, innerRange;
     float time;
+
+    public AudioClip clip;
 }
