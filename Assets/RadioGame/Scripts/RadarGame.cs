@@ -96,18 +96,26 @@ public class RadarGame : MonoBehaviour {
             if (Vector3.Distance(PlayerShip.position, signals[i].signalPosition) > signalWorldRange)
                 continue;
 
+            anySignalInnerRange |= (DetectorInInnerRange(signals[i]) && !signals[i].discovered);
+
             DetectorInOuterRange(signals[i], ref strength);
 
-            if (strength > 0)
+            if (!signals[i].discovered)
             {
-                signalSources[i].volume = strength;
+                if (strength > 0)
+                {
+                    signalSources[i].volume = strength;
+                }
+                else
+                {
+                    signalSources[i].volume = 0;
+                }
+                totalStrength += strength;
             } else
             {
-                signalSources[i].volume = 0;
+                signalSources[i].Stop();
             }
-            totalStrength += strength;
-
-            anySignalInnerRange |= (DetectorInInnerRange(signals[i]) && !signals[i].discovered);
+            
         }
 
         if (anySignalInnerRange)
