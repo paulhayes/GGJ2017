@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RadarGame : MonoBehaviour {
 
@@ -12,8 +13,7 @@ public class RadarGame : MonoBehaviour {
     [SerializeField]
     GameObject signal, innerRangeLight;
     [SerializeField]
-    float signalWorldRange, innerRangeTimerLength;
-    float innerRangeTimer;
+    float signalWorldRange;
 
     [Header("Radar arm & detector")]
     [SerializeField]
@@ -21,6 +21,14 @@ public class RadarGame : MonoBehaviour {
 
     [SerializeField]
     float detectorSpeed, detectorMinY, detectorMaxY;
+
+    [Header("Inner Range Timer")]
+    [SerializeField]
+    float innerRangeTimerLength;
+    float innerRangeTimer;
+
+    [SerializeField]
+    RectTransform timerSlider;
 
     float armAngle;
 
@@ -38,6 +46,11 @@ public class RadarGame : MonoBehaviour {
         {
             GameObject sourceObj = new GameObject("Signal Source " + i.ToString());
             signalSources[i] = sourceObj.AddComponent<AudioSource>();
+            if (signals[i].clip != null) {
+                signalSources[i].clip = signals[i].clip;
+                signalSources[i].loop = true;
+                signalSources[i].Play();
+            }
         }
 
         ResetInnerRangeTimer();
@@ -64,9 +77,7 @@ public class RadarGame : MonoBehaviour {
         if (signals.Length > 0 && signalSources.Length > 0)
             GetSignalStrengths();
 
-        float strength2 = 0;
-        //Debug.Log(DetectorInOuterRange(signals[0], ref strength2).ToString() + ", " + DetectorInInnerRange(signals[0]).ToString());
-        //Debug.Log(strength2);
+        SetTimerSliderSize();
     }
 
     void GetSignalStrengths ()
@@ -153,6 +164,11 @@ public class RadarGame : MonoBehaviour {
     void ResetInnerRangeTimer ()
     {
         innerRangeTimer = innerRangeTimerLength;
+    }
+
+    void SetTimerSliderSize ()
+    {
+        timerSlider.localScale = new Vector2(1 - ((1 / innerRangeTimerLength) * innerRangeTimer), 1);
     }
 
     void SetArmAngle()
