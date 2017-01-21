@@ -21,10 +21,13 @@ public class PlayerShip : MonoBehaviour {
 
     float zoomSpeed;
 
+    public static Vector3 position = Vector3.zero;
+
     public float cameraEase;
+    ParticleSystem.EmissionModule emissions;
 
 	void Start () {
-		
+        emissions = thrustParticles.emission;
 	}
 	
 	void Update () {
@@ -32,11 +35,20 @@ public class PlayerShip : MonoBehaviour {
             mapMode = !mapMode;
         }
 
-        //thrustParticles.emission.enabled = Input.GetAxis("Z Axis")>0;
+        emissions.enabled = Input.GetAxis("Z Axis")>0;
         
 
         CameraPos();
-	}
+
+        position = body.position;
+
+    }
+
+    private void FixedUpdate()
+    {
+        body.AddForce(body.transform.forward * Mathf.Clamp01(Input.GetAxis("Z Axis")) );
+
+    }
 
     void CameraPos() {
         Vector3 pos = playerCameras.position;
@@ -45,8 +57,8 @@ public class PlayerShip : MonoBehaviour {
         blurFX.enabled = Mathf.InverseLerp(zoomInPos, zoomOutPos, pos.y) < 0.5f;
         mainCamera.enabled = Mathf.InverseLerp(zoomInPos, zoomOutPos, pos.y) < 0.5f;
 
-        pos.x += cameraEase * (ship.position.x - pos.x);
-        pos.z += cameraEase * (ship.position.z - pos.z);
+        pos.x += Time.deltaTime * cameraEase * (ship.position.x - pos.x);
+        pos.z += Time.deltaTime * cameraEase * (ship.position.z - pos.z);
 
         playerCameras.position = pos;
 
