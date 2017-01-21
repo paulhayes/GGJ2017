@@ -4,36 +4,51 @@ using UnityEngine;
 
 public class RadarGame : MonoBehaviour {
 
+    #region Declaring variables
+    [Header("Signals")]
     public Signal[] signals;
+    public AudioSource[] signalSources;
 
     [SerializeField]
-    GameObject signal;
-
+    GameObject signal, innerRangeLight;
     [SerializeField]
-    float signalRange;
+    float signalWorldRange, innerRangeTimerLength;
+    float innerRangeTimer;
 
+    [Header("Radar arm & detector")]
     [SerializeField]
     GameObject armPivot, detector;
-    float armAngle;
 
     [SerializeField]
     float detectorSpeed, detectorMinY, detectorMaxY;
 
+    float armAngle;
+
     float xAxis;
     float yAxis;
     float zAxis;
+    #endregion
 
     // Use this for initialization
     void Start() {
-        //detector = armPivot.transform.FindChild("Detector").gameObject;
         PlaceSignals();
+
+        signalSources = new AudioSource[signals.Length];
+        for (int i = 0; i < signals.Length; i++)
+        {
+            GameObject sourceObj = new GameObject("Signal Source " + i.ToString());
+            signalSources[i] = sourceObj.AddComponent<AudioSource>();
+        }
+
+        ResetInnerRangeTimer();
     }
 
     // Update is called once per frame
     void Update() {
+        Debug.Log(innerRangeTimer);
         xAxis = Input.GetAxis("Horizontal");
         yAxis = Input.GetAxis("Vertical");
-        zAxis = Input.GetAxis("Z Axis");
+        zAxis = Input.GetAxisRaw("Z Axis");
 
         if (Mathf.Abs(xAxis) >= 0.1f || Mathf.Abs(yAxis) >= 0.1f)
         {
@@ -46,13 +61,48 @@ public class RadarGame : MonoBehaviour {
             HideArm();
         }
 
+        if (signals.Length > 0 && signalSources.Length > 0)
+            GetSignalStrengths();
+
+        float strength2 = 0;
+        //Debug.Log(DetectorInOuterRange(signals[0], ref strength2).ToString() + ", " + DetectorInInnerRange(signals[0]).ToString());
+        //Debug.Log(strength2);
+    }
+
+    void GetSignalStrengths ()
+    {
+        float totalStrength = 0;
+        bool anySignalInnerRange = false;
         for (int i = 0; i < signals.Length; i++)
         {
-            DetectorInOuterRange(signals[i]);
-            DetectorInInnerRange(signals[i]);
+            float strength = 0;
+            DetectorInOuterRange(signals[i], ref strength);
+
+            if (strength > 0)
+            {
+                signalSources[i].volume = strength;
+            } else
+            {
+                signalSources[i].volume = 0;
+            }
+            totalStrength += strength;
+
+            anySignalInnerRange |= DetectorInInnerRange(signals[i]);
         }
 
-        Debug.Log(DetectorInOuterRange(signals[0]).ToString() + ", " + DetectorInInnerRange(signals[0]).ToString());
+        if (anySignalInnerRange)
+        {
+            innerRangeLight.GetComponent<MeshRenderer>().sharedMaterial.color = new Color(0, 1, 0);
+            DecreaseInnerRangeTimer();
+        } else
+        {
+            innerRangeLight.GetComponent<MeshRenderer>().sharedMaterial.color = new Color(1, 0, 0);
+            ResetInnerRangeTimer();
+        }
+            
+
+        float staticVolume = 1 - totalStrength;
+        //Debug.Log(staticVolume);
     }
 
     void PlaceSignals ()
@@ -76,22 +126,33 @@ public class RadarGame : MonoBehaviour {
         {
             return true;
         }
-
         return false;
     }
 
-    bool DetectorInOuterRange(Signal signal)
+    bool DetectorInOuterRange(Signal signal, ref float strength)
     {
         Vector3 detectorPos = new Vector3(detector.transform.position.x, detector.transform.position.y, 0);
         Vector3 signalPos = new Vector3(signal.frequency.position.x, signal.frequency.position.y, 0);
 
         float distance = Vector3.Distance(detectorPos, signalPos);
-        if (distance <= signal.outerRange && distance > signal.innerRange)
+        if (distance <= signal.outerRange)
         {
+            strength = Mathf.InverseLerp(signal.outerRange, signal.innerRange, distance);
             return true;
         }
 
         return false;
+    }
+
+    void DecreaseInnerRangeTimer ()
+    {
+        if(innerRangeTimer >= 0)
+            innerRangeTimer -= Time.deltaTime;
+    }
+
+    void ResetInnerRangeTimer ()
+    {
+        innerRangeTimer = innerRangeTimerLength;
     }
 
     void SetArmAngle()
