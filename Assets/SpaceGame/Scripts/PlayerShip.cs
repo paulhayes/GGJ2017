@@ -81,7 +81,7 @@ public class PlayerShip : MonoBehaviour {
         for (int i = 0; i < mapItemMakers.Length; i++) {
             if (mapItemMakers[i] != null)
             {
-                mapItemMakers[i].enabled = (unlockedSignals != null) ? unlockedSignals[i] : false;
+                mapItemMakers[i].enabled = (unlockedSignals != null) ? unlockedSignals[i] : true;
             }
         }
 
