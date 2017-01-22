@@ -228,8 +228,16 @@ public class PlayerShip : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.collider.attachedRigidbody == null)
+        {
+            return;
+        }
+
         float mag = collision.relativeVelocity.magnitude;
         float mass = collision.collider.attachedRigidbody.mass;
+
+
+
         //Debug.Log(mag);
         for (int i = 0; i < collisionsSounds.Length; i++) {
             if (mass <= collisionsSounds[i].impactThreshold) {
@@ -251,16 +259,7 @@ public class PlayerShip : MonoBehaviour {
                 itemsFound[index] = true;
                 collisionAudioSource.PlayOneShot(collectItemSound, 1f);
 
-                //check if all items are good
-                bool allDone = true;
-                for(int i = 0; i < itemsFound.Length; i++)
-                {
-                    allDone &= itemsFound[i];
-                }
-
-                if (allDone) {
-                    SceneManager.LoadScene("GameOver");
-                }
+                IsGameComplete();
 
             }
             else {
@@ -269,6 +268,25 @@ public class PlayerShip : MonoBehaviour {
             Debug.Log("Item collected");
 
         }
+    }
+
+    public static bool IsGameComplete ()
+    {
+        //check if all items are good
+        int allDone = 0;
+        for (int i = 0; i < itemsFound.Length; i++)
+        {
+            if (itemsFound[i])
+                allDone++;
+        }
+
+        if (allDone == 4 && unlockedSignals[unlockedSignals.Length-1])
+        {
+            SceneManager.LoadScene("GameOver");
+            return true;
+        }
+
+        return false;
     }
 
 }

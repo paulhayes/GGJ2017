@@ -118,7 +118,8 @@ public class RadarGame : MonoBehaviour {
         SetTimerSliderSize();
 
         if (Input.GetButtonDown("Fire3")) {
-            SceneManager.LoadScene("SpaceGame");
+            if( !PlayerShip.IsGameComplete() )
+                SceneManager.LoadScene("SpaceGame");
         }
     }
 
