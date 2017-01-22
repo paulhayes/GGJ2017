@@ -2,6 +2,7 @@ GGJ2017 Game TODO
 
 * Game name
 * Record Ghost signals
+* Models for parts to collect ( urgent )
 * Add ghost signals into game
 * Add item locations dicovered by signals onto map *
 * Add ship collectable items
