@@ -17,10 +17,13 @@ public class DebrisPool : MonoBehaviour {
         spawnedDebris = new GameObject[numDebris];
         Bounds box = spawnBox.bounds;
         spawnBox.transform.position = ship.transform.position;
-
+        Debug.LogFormat(":::>{0} {1}", box.center,spawnBox.transform.position);
+        
         for (int i = 0; i < numDebris; i++) {
             Vector3 pos = new Vector3(Random.Range(-box.extents.x, box.extents.x), Random.Range(-box.extents.y, box.extents.y), Random.Range(-box.extents.z, box.extents.z));
-            spawnedDebris[i] = Instantiate(debrisTemplates[Random.Range(0, debrisTemplates.Length)], spawnBox.transform.position + pos, Quaternion.identity) ;
+            //pos += spawnBox.transform.position;
+            pos += box.center;
+            spawnedDebris[i] = Instantiate(debrisTemplates[Random.Range(0, debrisTemplates.Length)], pos, Quaternion.identity) ;
             spawnedDebris[i].GetComponent<Rigidbody>().angularVelocity = Random.insideUnitSphere;
         }
 
@@ -34,6 +37,7 @@ public class DebrisPool : MonoBehaviour {
     {
         //Debug.LogFormat("Exitied {0}", other);
         other.attachedRigidbody.velocity = Vector3.zero;
+        other.attachedRigidbody.angularVelocity = Random.insideUnitSphere;
 
         Bounds box = spawnBox.bounds;
         float xSign = Mathf.Sign(ship.body.velocity.x);
@@ -41,6 +45,9 @@ public class DebrisPool : MonoBehaviour {
         bool spawnSide = Mathf.Abs(ship.body.velocity.normalized.x) > Random.value ;
 
         Vector3 pos = new Vector3(xSign * Random.Range(!spawnSide ? -box.extents.x : outerSpawnRing* box.extents.x, box.extents.x), Random.Range(-box.extents.y, box.extents.y), zSign*Random.Range(spawnSide?-box.extents.z: outerSpawnRing * box.extents.z, box.extents.z));
+        pos += spawnBox.transform.position;
+        //pos += box.center;
+
         /*
         if (!xBigger && Mathf.Abs(pos.x) < (outerSpawnRing*box.extents.x)) {
             pos.x = Mathf.Sign(pos.x) * outerSpawnRing *  box.extents.x;
@@ -50,6 +57,6 @@ public class DebrisPool : MonoBehaviour {
             pos.z = Mathf.Sign(pos.z) * outerSpawnRing * box.extents.z;
         }
         */
-        other.transform.position = pos + spawnBox.transform.position;
+        other.transform.position = pos;
     }
 }

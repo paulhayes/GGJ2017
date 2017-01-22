@@ -137,7 +137,7 @@ public class PlayerShip : MonoBehaviour {
             if (mass <= collisionsSounds[i].impactThreshold) {
                 collisionsSounds[i].lastIndex = (collisionsSounds[i].lastIndex + Random.Range(1, collisionsSounds[i].clips.Length-1) ) % collisionsSounds[i].clips.Length;
                 Debug.Log(collisionsSounds[i].clips[collisionsSounds[i].lastIndex].name);
-                collisionAudioSource.PlayOneShot(collisionsSounds[i].clips[collisionsSounds[i].lastIndex], Mathf.Clamp01(mag/2f));
+                collisionAudioSource.PlayOneShot(collisionsSounds[i].clips[collisionsSounds[i].lastIndex], Mathf.Clamp01(mag*10f));
                 break;
             }
 
