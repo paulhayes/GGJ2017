@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class RadarGame : MonoBehaviour {
@@ -82,6 +83,10 @@ public class RadarGame : MonoBehaviour {
             GetSignalStrengths();
 
         SetTimerSliderSize();
+
+        if (Input.GetButtonDown("Fire3")) {
+            SceneManager.LoadScene("SpaceGame");
+        }
     }
 
     void GetSignalStrengths()
@@ -108,8 +113,6 @@ public class RadarGame : MonoBehaviour {
                 strongestSignalStrength = strength;
             }
 
-            Debug.Log(strength);
-
             if (strength > 0)
             {
                 signalSources[i].volume = signals[i].maxClipVolume * strength;
@@ -122,24 +125,19 @@ public class RadarGame : MonoBehaviour {
 
         }
 
-        if ( strongestSignal!=null && !strongestSignal.discovered) {
-            if (anySignalInnerRange)
-            {
+        if (anySignalInnerRange) {
+            if (!strongestSignal.discovered){
                 DecreaseInnerRangeTimer();
             }
-            else {
-                ResetInnerRangeTimer();
-            }
-        }
-
-        if (anySignalInnerRange)
-        {
+            
             innerRangeLight.GetComponent<MeshRenderer>().sharedMaterial.color = new Color(0, 1, 0);
         } else if (anySignalOuterRange) {
             innerRangeLight.GetComponent<MeshRenderer>().sharedMaterial.color = new Color(1, 0.65f, 0);
+            ResetInnerRangeTimer();
         } else
         {
             innerRangeLight.GetComponent<MeshRenderer>().sharedMaterial.color = new Color(1, 0, 0);
+            ResetInnerRangeTimer();
         }
             
         float staticVolume = 1 - totalStrength;
