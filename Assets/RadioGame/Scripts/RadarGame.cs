@@ -17,7 +17,7 @@ public class RadarGame : MonoBehaviour {
     [SerializeField]
     Sprite signalSprite;
     [SerializeField]
-    GameObject innerRangeLight;
+    GameObject innerRangeLight, signalDiscoveredText;
     [SerializeField]
     float signalWorldRange;
 
@@ -50,6 +50,7 @@ public class RadarGame : MonoBehaviour {
             PlayerShip.unlockedSignals = new bool[signals.Length];
         }
 
+        HideSignalDiscoveredText();
         //PlaceSignals();
 
         signalSources = new AudioSource[signals.Length];
@@ -175,6 +176,7 @@ public class RadarGame : MonoBehaviour {
 
         SpriteRenderer signalSpriteRender = signal.frequency.gameObject.AddComponent<SpriteRenderer>();
         signalSpriteRender.sprite = signalSprite;
+        signalSpriteRender.sortingLayerName = "Radar_Icons";
     }
 
     void ShowSignalSprite (Signal signal)
@@ -247,6 +249,23 @@ public class RadarGame : MonoBehaviour {
             innerRangeTimer -= Time.deltaTime;
     }
 
+    void ShowSignalDiscoveredText ()
+    {
+        signalDiscoveredText.SetActive(true);
+        StartCoroutine(WaitForSignalTimer());
+    }
+
+    IEnumerator WaitForSignalTimer ()
+    {
+        yield return new WaitForSeconds(3);
+        HideSignalDiscoveredText();
+    }
+
+    void HideSignalDiscoveredText ()
+    {
+        signalDiscoveredText.SetActive(false);
+    }
+
     void ResetInnerRangeTimer ()
     {
         innerRangeTimer = innerRangeTimerLength;
@@ -255,6 +274,7 @@ public class RadarGame : MonoBehaviour {
     void OnTimerFinish ()
     {
         ResetInnerRangeTimer();
+        ShowSignalDiscoveredText();
     }
 
     void SetTimerSliderSize ()
