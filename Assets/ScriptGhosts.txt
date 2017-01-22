@@ -22,7 +22,7 @@ OPENING TEXT
 FIRST VOICE:
 
 
-[0] "This is the fleet of the Madrigal, we are a civilian fleet. We are not military. Please cease fire. We are a civilian flee-"
+=[0]= "This is the fleet of the Madrigal, we are a civilian fleet. We are not military. Please cease fire. We are a civilian flee-"
 
 
 
