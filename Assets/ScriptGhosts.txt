@@ -1,0 +1,86 @@
+Script
+
+
+Dish
+
+Transmitter (done)
+Fuel x 4?
+Power Cell (done)
+Life Support
+
+Ship Order: Shawm, Tabor, Dulcimer, Madrigal
+
+OPENING TEXT
+
+
+"This is Ariel, lifeboat of The Prospero calling"
+"I wish I could say we were caught in a storm, for the poetry of it"
+"but we ran into debris, a billion to one chance, and it tore the ship into confetti"
+"I am the only survivor, my name is [Annie, pick a name!] "
+"is anyone alive out there?"
+
+FIRST VOICE:
+
+
+=[0]= "This is the fleet of the Madrigal, we are a civilian fleet. We are not military. Please cease fire. We are a civilian flee-"
+
+
+
+SHAWM VOICES: 
+
+
+[1]  "I see you passing through here, there isn't much left to look at now, and most of the rest are blind anyway, but I see you little ship." (voice A)
+
+
+[2]  "All right children, put your hands up if you want blue paper for your lantern, I see one, two, three, four. Now who wants purple?" (Far away from mic)
+
+
+=[3]= "There's a little heart still beating on The Tabor, I still hear it going tap tap tap, a little strength, a little power." (Power cell location!...needs work) 
+
+
+[4] *child sounds*
+
+
+TABOR VOICES:
+
+
+[5] *birds singing*  (You should be able to grab something from a sound library for thisÉblackbird maybe? Good and distinct enough to not be mistaken for white noise).
+
+
+[6] "We turned out all the lights, from torch to lamp to artificial sun, they turned out all the lights. " (More than one voice here maybe?)
+
+
+=[7]= Would you send a letter for us little ship? There is an envelope on The Dulcimer, the edges are a little torn but it still holds a letter, you can even keep it if you like.Ó (Transmitter location voice A)
+
+
+[8] "I didn't like it, the sky being brokenÓ (repeating and disintegrating maybe?)"
+
+
+
+DULCIMER VOICES:
+
+
+[9] "Hello?.....hello?...hello?Ó  (etc, good to have a few be creepy ja?)
+
+
+[10] "We're bleeding out, weÕre bleeding out!Ó  (Fuel location any voice)"
+
+
+=[11]= "All life-rafts to [The Madrigal], life support unit [A] functioning"  (very flat voice, like an auto recording, location of life support.)
+
+
+
+MADRIGAL VOICES:
+
+
+[12] "Farewell from voice A ÒGood luck little ship, donÕt forget to post our letter"
+
+
+END TEXT:
+
+
+"This is Ariel, lifeboat of The Prospero calling
+my location is [coordinates]
+one survivor, my name is [name]
+and data logs from The Madrigal civilian fleet
+destroyed in an act of war."
