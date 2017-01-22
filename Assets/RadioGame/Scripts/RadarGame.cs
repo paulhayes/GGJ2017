@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class RadarGame : MonoBehaviour {
 
     #region Declaring variables
+    public static bool isFirstTime = true;
+
     [Header("Signals")]
     public Signal[] signals;
     public AudioSource[] signalSources;
@@ -17,7 +19,7 @@ public class RadarGame : MonoBehaviour {
     [SerializeField]
     Sprite signalSprite;
     [SerializeField]
-    GameObject innerRangeLight;
+    GameObject innerRangeLight, signalDiscoveredText;
     [SerializeField]
     float signalWorldRange;
 
@@ -45,11 +47,17 @@ public class RadarGame : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+        if (isFirstTime)
+        {
+            ShowTutorialIcons();
+            isFirstTime = false;
+        }
 
         if (PlayerShip.unlockedSignals == null) {
             PlayerShip.unlockedSignals = new bool[signals.Length];
         }
 
+        HideSignalDiscoveredText();
         //PlaceSignals();
 
         signalSources = new AudioSource[signals.Length];
@@ -67,7 +75,7 @@ public class RadarGame : MonoBehaviour {
             if (signals[i].clip != null) {
                 signalSources[i].clip = signals[i].clip;
                 signalSources[i].loop = true;
-                signalSources[i].volume = signals[i].maxClipVolume;
+                signalSources[i].volume = 0;
                 signalSources[i].Play();
             }
         }
@@ -105,6 +113,11 @@ public class RadarGame : MonoBehaviour {
         if (Input.GetButtonDown("Fire3")) {
             SceneManager.LoadScene("SpaceGame");
         }
+    }
+
+    void ShowTutorialIcons ()
+    {
+
     }
 
     void GetSignalStrengths()
@@ -175,6 +188,7 @@ public class RadarGame : MonoBehaviour {
 
         SpriteRenderer signalSpriteRender = signal.frequency.gameObject.AddComponent<SpriteRenderer>();
         signalSpriteRender.sprite = signalSprite;
+        signalSpriteRender.sortingLayerName = "Radar_Icons";
     }
 
     void ShowSignalSprite (Signal signal)
@@ -247,6 +261,23 @@ public class RadarGame : MonoBehaviour {
             innerRangeTimer -= Time.deltaTime;
     }
 
+    void ShowSignalDiscoveredText ()
+    {
+        signalDiscoveredText.SetActive(true);
+        StartCoroutine(WaitForSignalTimer());
+    }
+
+    IEnumerator WaitForSignalTimer ()
+    {
+        yield return new WaitForSeconds(3);
+        HideSignalDiscoveredText();
+    }
+
+    void HideSignalDiscoveredText ()
+    {
+        signalDiscoveredText.SetActive(false);
+    }
+
     void ResetInnerRangeTimer ()
     {
         innerRangeTimer = innerRangeTimerLength;
@@ -255,6 +286,7 @@ public class RadarGame : MonoBehaviour {
     void OnTimerFinish ()
     {
         ResetInnerRangeTimer();
+        ShowSignalDiscoveredText();
     }
 
     void SetTimerSliderSize ()
