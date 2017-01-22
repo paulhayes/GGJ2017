@@ -6,6 +6,10 @@ using UnityStandardAssets.ImageEffects;
 
 public class PlayerShip : MonoBehaviour {
 
+    public static Vector3 position = new Vector3(0, -40, 0);
+    public static float rotation = 0;
+    public static bool[] unlockedSignals;
+
     public Camera mainCamera;
     public Transform playerCameras;
     public Transform mapCentrePosition;
@@ -39,7 +43,6 @@ public class PlayerShip : MonoBehaviour {
 
     Vector3 zoomSpeed;
 
-    public static Vector3 position = new Vector3(0,-40,0);
 
     public float cameraEase;
     ParticleSystem.EmissionModule emissions;
@@ -55,6 +58,7 @@ public class PlayerShip : MonoBehaviour {
     void Start () {
         uiMapCamera.enabled = mapMode;
         transform.position = position;
+        transform.rotation = Quaternion.Euler(0, rotation, 0);
 
         var mapCenterPos = mapCentrePosition.position;
         mapCenterPos.y = zoomOutPos;
@@ -86,6 +90,7 @@ public class PlayerShip : MonoBehaviour {
 
 
         position = body.position;
+        rotation = body.rotation.eulerAngles.y;
 
 
         thrustInput = Mathf.Clamp01(Input.GetAxis("Z Axis"));

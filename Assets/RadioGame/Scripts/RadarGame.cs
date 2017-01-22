@@ -43,6 +43,11 @@ public class RadarGame : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+
+        if (PlayerShip.unlockedSignals == null) {
+            PlayerShip.unlockedSignals = new bool[signals.Length];
+        }
+
         PlaceSignals();
 
         signalSources = new AudioSource[signals.Length];
@@ -50,6 +55,7 @@ public class RadarGame : MonoBehaviour {
         {
             GameObject sourceObj = new GameObject("Signal Source " + i.ToString());
             signalSources[i] = sourceObj.AddComponent<AudioSource>();
+            signals[i].discovered = PlayerShip.unlockedSignals[i];
             if (signals[i].clip != null) {
                 signalSources[i].clip = signals[i].clip;
                 signalSources[i].loop = true;
@@ -59,6 +65,7 @@ public class RadarGame : MonoBehaviour {
         }
 
         ResetInnerRangeTimer();
+        ShowArm();
     }
 
     // Update is called once per frame
@@ -70,13 +77,15 @@ public class RadarGame : MonoBehaviour {
 
         if (Mathf.Abs(xAxis) >= 0.1f || Mathf.Abs(yAxis) >= 0.1f)
         {
-            ShowArm();
+            
             SetArmAngle();
             SetDetectorPos();
 
         } else
         {
-            HideArm();
+            //HideArm();
+            ResetArmAngle();
+            SetDetectorPos();
         }
 
         if (signals.Length > 0 && signalSources.Length > 0)
@@ -214,6 +223,11 @@ public class RadarGame : MonoBehaviour {
     {
         armAngle = (Mathf.Atan2(yAxis, xAxis) * Mathf.Rad2Deg) - 90f;
         armPivot.transform.localRotation = Quaternion.Euler(armPivot.transform.localRotation.x, armPivot.transform.localRotation.y, armAngle);
+    }
+
+    void ResetArmAngle()
+    {
+        armPivot.transform.localRotation = Quaternion.identity;
     }
 
     void ShowArm ()
