@@ -2,6 +2,7 @@ GGJ2017 Game TODO
 
 * Game name
 * Record Ghost signals
+* Add intro images and text to game
 * Models for parts to collect ( urgent ) - (Satellite dish[✓], transmitter, power cell, life support, fuel blobs)
 * Fractured ships models
 * Add ghost signals into game
