@@ -11,6 +11,8 @@ public class Signal {
     public float outerRange, innerRange;
     //float time;
 
+    public bool pointsToPosition;
+    
     public bool discovered;
     public AudioClip clip;
     [Range(0, 1)]
