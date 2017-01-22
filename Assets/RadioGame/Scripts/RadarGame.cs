@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class RadarGame : MonoBehaviour {
 
     #region Declaring variables
+    public static bool isFirstTime = true;
+
     [Header("Signals")]
     public Signal[] signals;
     public AudioSource[] signalSources;
@@ -45,6 +47,11 @@ public class RadarGame : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+        if (isFirstTime)
+        {
+            ShowTutorialIcons();
+            isFirstTime = false;
+        }
 
         if (PlayerShip.unlockedSignals == null) {
             PlayerShip.unlockedSignals = new bool[signals.Length];
@@ -106,6 +113,11 @@ public class RadarGame : MonoBehaviour {
         if (Input.GetButtonDown("Fire3")) {
             SceneManager.LoadScene("SpaceGame");
         }
+    }
+
+    void ShowTutorialIcons ()
+    {
+
     }
 
     void GetSignalStrengths()
