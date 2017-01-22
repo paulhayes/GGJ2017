@@ -13,9 +13,8 @@ GGJ2017 Game TODO
 * Button hints on radio game first time you load them
 * Add complete game trigger and scene
 * Music Structured Playback
-* Message on Radio game infoming player they have a new location on the map when signal discovered *
 
 *new idea by @paulhayes to help the game be playable without all the features we envisioned
 
 DONE ( move under here when ^^ is done )
-
+* Message on Radio game infoming player they have a new location on the map when signal discovered *
