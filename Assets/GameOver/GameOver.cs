@@ -7,12 +7,11 @@ public class GameOver : MonoBehaviour {
 
     public Text text;
     public float delay = 5;
-	// Use this for initialization
-	void Start () {
+
+    void Start () {
         text.text = string.Format(text.text, PlayerShip.position.ToString());
 	}
 	
-	// Update is called once per frame
 	void Update () {
         delay -= Time.deltaTime;
 
