@@ -2,7 +2,9 @@ GGJ2017 Game TODO
 
 * Game name
 * Record Ghost signals
-* Models for parts to collect ( urgent )
+* Add intro images and text to game
+* Models for parts to collect ( urgent ) - (Satellite dish[✓], transmitter, power cell, life support, fuel blobs)
+* Fractured ships models
 * Add ghost signals into game
 * Add item locations dicovered by signals onto map *
 * Add ship collectable items
@@ -11,7 +13,7 @@ GGJ2017 Game TODO
 * Button hints on radio game first time you load them
 * Add complete game trigger and scene
 * Music Structured Playback
-* Message on Radio game infoming player they have a new location on the map when recording unlocked *
+* Message on Radio game infoming player they have a new location on the map when signal discovered *
 
 *new idea by @paulhayes to help the game be playable without all the features we envisioned
 
