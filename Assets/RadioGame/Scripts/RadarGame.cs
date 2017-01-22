@@ -122,7 +122,7 @@ public class RadarGame : MonoBehaviour {
 
         }
 
-        if (!strongestSignal.discovered) {
+        if ( strongestSignal!=null && !strongestSignal.discovered) {
             if (anySignalInnerRange)
             {
                 DecreaseInnerRangeTimer();

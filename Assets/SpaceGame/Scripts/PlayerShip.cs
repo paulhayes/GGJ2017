@@ -17,6 +17,7 @@ public class PlayerShip : MonoBehaviour {
     public AudioSource collisionAudioSource;
     public AudioSource thrustNoise;
     public AudioSource steeringNoise;
+    public Camera uiMapCamera;
 
 
     [System.Serializable]
@@ -29,7 +30,6 @@ public class PlayerShip : MonoBehaviour {
 
     public CollisionSound[] collisionsSounds;
 
-    public bool mapMode;
     public float zoomInPos = 0;
     public float zoomOutPos = 2000;
     public float zoomSmooth;
@@ -37,20 +37,34 @@ public class PlayerShip : MonoBehaviour {
     public float thrust;
     public float thrustRotation;
 
-    float zoomSpeed;
+    Vector3 zoomSpeed;
 
     public static Vector3 position = new Vector3(0,-40,0);
 
     public float cameraEase;
     ParticleSystem.EmissionModule emissions;
     ParticleSystem.EmissionModule[] steeringEmitters;
-
+    Vector3 easedCameraPosition;
     Vector3  rotThrust;
     float thrustInput;
     float steeringInput;
 
+    bool mapMode;
+    bool zooming;
+
     void Start () {
+        uiMapCamera.enabled = mapMode;
         transform.position = position;
+
+        var mapCenterPos = mapCentrePosition.position;
+        mapCenterPos.y = zoomOutPos;
+        mapCentrePosition.position = mapCenterPos;
+
+        var shipCamPosition = transform.position;
+        shipCamPosition.y = zoomInPos;
+
+        easedCameraPosition = mapMode ? mapCentrePosition.position : shipCamPosition;
+        playerCameras.position = easedCameraPosition;
 
         emissions = thrustParticles.emission;
         steeringEmitters = new ParticleSystem.EmissionModule[steeringThruster.Length];
@@ -63,6 +77,9 @@ public class PlayerShip : MonoBehaviour {
 	void Update () {
         if (Input.GetButtonDown("Fire4")) {
             mapMode = !mapMode;
+            zooming = true;
+            if(!mapMode) uiMapCamera.enabled = mapMode;
+
         }
 
         emissions.enabled = Input.GetAxis("Z Axis")>0;
@@ -85,15 +102,31 @@ public class PlayerShip : MonoBehaviour {
             rotThrust = -thrustRotation * body.angularVelocity;
         }
 
+        
         Vector3 pos = playerCameras.position;
-        pos.y = Mathf.SmoothDamp(pos.y, mapMode ? zoomOutPos : zoomInPos, ref zoomSpeed, zoomSmooth, zoomMasSpeed, Time.unscaledDeltaTime);
+        Vector3 dest = mapMode ? mapCentrePosition.position : easedCameraPosition;
+
+        if (zooming)
+        {
+            pos = Vector3.SmoothDamp(pos, dest, ref zoomSpeed, zoomSmooth, zoomMasSpeed, Time.unscaledDeltaTime);
+
+            if (Vector3.Distance(pos,dest)<0.31f)
+            {
+                zooming = false;
+                uiMapCamera.enabled = mapMode;
+            }
+        }
+        else if(!mapMode){
+            pos = easedCameraPosition;
+        }
+
         playerCameras.position = pos;
         float threshold = 0.1f;
         blurFX.enabled = Mathf.InverseLerp(zoomInPos, zoomOutPos, pos.y) < threshold;
         mainCamera.enabled = Mathf.InverseLerp(zoomInPos, zoomOutPos, pos.y) < threshold;
 
         float zoom = Mathf.InverseLerp(zoomOutPos, zoomInPos, pos.y);
-        Time.timeScale = zoom;
+        Time.timeScale = ( zooming || mapMode ) ? 0 : 1;
 
         if ( Input.GetButtonDown("Fire3" ) ) {
             Time.timeScale = 1f;
@@ -139,12 +172,15 @@ public class PlayerShip : MonoBehaviour {
     }
 
     void CameraPos() {
-        Vector3 pos = playerCameras.position;
+        if (!zooming) {
+            Vector3 pos = easedCameraPosition;
 
-        pos.x += Time.deltaTime * cameraEase * (ship.position.x - pos.x);
-        pos.z += Time.deltaTime * cameraEase * (ship.position.z - pos.z);
+            pos.x += Time.deltaTime * cameraEase * (ship.position.x - pos.x);
+            pos.z += Time.deltaTime * cameraEase * (ship.position.z - pos.z);
 
-        playerCameras.position = pos;
+            easedCameraPosition = pos;
+        }
+
 
     }
 
