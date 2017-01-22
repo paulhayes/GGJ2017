@@ -12,7 +12,7 @@ GGJ2017 Game TODO
 * Music Structured Playback
 * Message on Radio game infoming player they have a new location on the map when recording unlocked *
 
-*new idea by @paulhayes
+*new idea by @paulhayes to help the game be playable without all the features we envisioned
 
 DONE ( move under here when ^^ is done )
 
