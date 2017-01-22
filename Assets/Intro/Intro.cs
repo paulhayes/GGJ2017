@@ -9,10 +9,10 @@ public class Intro : MonoBehaviour {
     int index = 0;
 
 	void Start () {
-        OnIntroComplete();
+        screens[index].SetActive(true);
     }
-	
-	void Update () {
+
+    void Update () {
         if (Input.anyKeyDown || Input.GetButtonDown("Fire1")) {
             index++;
 
