@@ -35,71 +35,65 @@ OPENING TEXT
 FIRST VOICE:
 
 
-"This is the fleet of the Madrigal, we are a civilian fleet. We are not military. Please cease fire. We are a civilian flee-"
+[0] "This is the fleet of the Madrigal, we are a civilian fleet. We are not military. Please cease fire. We are a civilian flee-"
 
 
 
 SHAWM VOICES: 
 
 
-"I see you passing through here, there isnÕt much left to look at now, and most of the rest are blind anyway, but I see you little ship." (voice A)
+[1]  "I see you passing through here, there isn't much left to look at now, and most of the rest are blind anyway, but I see you little ship." (voice A)
 
 
-"All right children, put your hands up if you want blue paper for your lantern, I see one, two, three, four. Now who wants purple?" (Far away from mic)
+[2]  "All right children, put your hands up if you want blue paper for your lantern, I see one, two, three, four. Now who wants purple?" (Far away from mic)
 
 
-ÒThereÕs a little heart still beating on The Tabor, I still hear it going tap tap tap, a little strength, a little power.Ó (Power cell location!...needs work) 
+=[3]= "There's a little heart still beating on The Tabor, I still hear it going tap tap tap, a little strength, a little power." (Power cell location!...needs work) 
 
 
-*child sounds*
-
+[4] *child sounds*
 
 
 TABOR VOICES:
 
 
-*birds singing*  (You should be able to grab something from a sound library for thisÉblackbird maybe? Good and distinct enough to not be mistaken for white noise).
+[5] *birds singing*  (You should be able to grab something from a sound library for thisÉblackbird maybe? Good and distinct enough to not be mistaken for white noise).
 
 
-ÒWe turned out all the lights, from torch to lamp to artificial sun, they turned out all the lights. Ó (More than one voice here maybe?)
+[6] "We turned out all the lights, from torch to lamp to artificial sun, they turned out all the lights. " (More than one voice here maybe?)
 
 
-ÒWould you send a letter for us little ship? There is an envelope on The Dulcimer, the edges are a little torn but it still holds a letter, you can even keep it if you like.Ó (Transmitter location voice A)
+=[6]= Would you send a letter for us little ship? There is an envelope on The Dulcimer, the edges are a little torn but it still holds a letter, you can even keep it if you like.Ó (Transmitter location voice A)
 
 
-ÒI didnÕt like it, the sky being brokenÓ (repeating and disintegrating maybe?)
+[7] "I didn't like it, the sky being brokenÓ (repeating and disintegrating maybe?)"
 
 
 
 DULCIMER VOICES:
 
 
-ÒHello?.....hello?...hello?Ó  (etc, good to have a few be creepy ja?)
+[8] "Hello?.....hello?...hello?Ó  (etc, good to have a few be creepy ja?)
 
 
-ÒWeÕre bleeding out, weÕre bleeding out!Ó  (Fuel location any voice)
+[9] "We're bleeding out, weÕre bleeding out!Ó  (Fuel location any voice)"
 
 
-ÒAll life-rafts to [The Madrigal], life support unit [A] functioningÉÓ  (very flat voice, like an auto recording, location of life support.)
+=[10]= "All life-rafts to [The Madrigal], life support unit [A] functioning"  (very flat voice, like an auto recording, location of life support.)
 
 
 
 MADRIGAL VOICES:
 
 
-Farewell from voice A ÒGood luck little ship, donÕt forget to post our letterÉÓ
-
+[11] "Farewell from voice A ÒGood luck little ship, donÕt forget to post our letter"
 
 
 END TEXT:
 
 
-ÒThis is Ariel, lifeboat of The Prospero callingÉÓ
-
-Émy location is [coordinates]É
-
-Éone survivor, my name is [name]É 
-
-Éand data logs from The Madrigal civilian fleetÉÓ
-
-ÒÉdestroyed in an act of war.Ó
+"This is Ariel, lifeboat of The Prospero calling
+my location is [coordinates]
+one survivor, my name is [name]
+and data logs from The Madrigal civilian fleet
+destroyed in an act of war."
