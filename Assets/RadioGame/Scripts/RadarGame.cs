@@ -15,7 +15,9 @@ public class RadarGame : MonoBehaviour {
     AudioSource noiseSource;
 
     [SerializeField]
-    GameObject signal, innerRangeLight;
+    Sprite signalSprite;
+    [SerializeField]
+    GameObject innerRangeLight;
     [SerializeField]
     float signalWorldRange;
 
@@ -48,7 +50,7 @@ public class RadarGame : MonoBehaviour {
             PlayerShip.unlockedSignals = new bool[signals.Length];
         }
 
-        PlaceSignals();
+        //PlaceSignals();
 
         signalSources = new AudioSource[signals.Length];
         for (int i = 0; i < signals.Length; i++)
@@ -56,6 +58,12 @@ public class RadarGame : MonoBehaviour {
             GameObject sourceObj = new GameObject("Signal Source " + i.ToString());
             signalSources[i] = sourceObj.AddComponent<AudioSource>();
             signals[i].discovered = PlayerShip.unlockedSignals[i];
+
+            if (signals[i].discovered)
+            {
+                InitializeSignalSprite(signals[i]);
+            }
+
             if (signals[i].clip != null) {
                 signalSources[i].clip = signals[i].clip;
                 signalSources[i].loop = true;
@@ -112,7 +120,12 @@ public class RadarGame : MonoBehaviour {
             float strength = 0;
 
             if (Vector3.Distance(PlayerShip.position, signals[i].signalPosition) > signalWorldRange)
+            {
+                HideSignalSprite(signals[i]);
                 continue;
+            }
+
+            ShowSignalSprite(signals[i]);
 
             anySignalInnerRange |= (DetectorInInnerRange(signals[i]));
 
@@ -155,16 +168,43 @@ public class RadarGame : MonoBehaviour {
         //Debug.Log(staticVolume);
     }
 
-    void PlaceSignals ()
+    void InitializeSignalSprite (Signal signal)
+    {
+        signal.frequency.localScale = new Vector3(signal.innerRange * 2, signal.innerRange * 2, 1);
+        Vector3 signalPos = signal.frequency.position;
+
+        SpriteRenderer signalSpriteRender = signal.frequency.gameObject.AddComponent<SpriteRenderer>();
+        signalSpriteRender.sprite = signalSprite;
+    }
+
+    void ShowSignalSprite (Signal signal)
+    {
+        SpriteRenderer signalSpriteRender = signal.frequency.gameObject.GetComponent<SpriteRenderer>();
+        if (signalSpriteRender != null)
+        {
+            signalSpriteRender.enabled = true;
+        }
+    }
+
+    void HideSignalSprite (Signal signal)
+    {
+        SpriteRenderer signalSpriteRender = signal.frequency.gameObject.GetComponent<SpriteRenderer>();
+        if (signalSpriteRender != null)
+        {
+            signalSpriteRender.enabled = false;
+        }
+    }
+
+    /*void PlaceSignals ()
     {
         for (int i = 0; i < signals.Length; i++)
         {
             Vector3 signalPos = signals[i].frequency.position;
-            GameObject newSignal = Instantiate(signal, signalPos, Quaternion.identity) as GameObject;
+            //GameObject newSignal = Instantiate(signalSprite, signalPos, Quaternion.identity) as GameObject;
             newSignal.transform.GetChild(0).localScale = new Vector3(signals[i].innerRange*2, 0.1f, signals[i].innerRange*2);
             newSignal.transform.GetChild(1).localScale = new Vector3(signals[i].outerRange*2, 0.1f, signals[i].outerRange*2);
         }
-    }
+    }*/
 
     bool DetectorInInnerRange (Signal signal)
     {
@@ -178,7 +218,7 @@ public class RadarGame : MonoBehaviour {
             {
                 int index = System.Array.IndexOf<Signal>(signals, signal);
                 PlayerShip.unlockedSignals[index] = signal.discovered = true;
-                
+                InitializeSignalSprite(signal);
                 OnTimerFinish();
             }
             return true;
