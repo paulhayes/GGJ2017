@@ -68,7 +68,7 @@ public class RadarGame : MonoBehaviour {
             if (signals[i].clip != null) {
                 signalSources[i].clip = signals[i].clip;
                 signalSources[i].loop = true;
-                signalSources[i].volume = signals[i].maxClipVolume;
+                //signalSources[i].volume = signals[i].maxClipVolume;
                 signalSources[i].Play();
             }
         }
