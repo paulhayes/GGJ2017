@@ -4,33 +4,20 @@ Script
 Dish
 
 Transmitter (done)
-
 Fuel x 4?
-
 Power Cell (done)
-
 Life Support
 
-
 Ship Order: Shawm, Tabor, Dulcimer, Madrigal
-
-
 
 OPENING TEXT
 
 
 "This is Ariel, lifeboat of The Prospero calling"
-
 "I wish I could say we were caught in a storm, for the poetry of it"
-
 "but we ran into debris, a billion to one chance, and it tore the ship into confetti"
-
 "I am the only survivor, my name is [Annie, pick a name!] "
-
 "is anyone alive out there?"
-
-
-
 
 FIRST VOICE:
 
