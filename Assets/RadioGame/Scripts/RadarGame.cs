@@ -245,6 +245,7 @@ public class RadarGame : MonoBehaviour {
                 int index = System.Array.IndexOf<Signal>(signals, signal);
                 PlayerShip.unlockedSignals[index] = signal.discovered = true;
                 InitializeSignalSprite(signal);
+                ShowSignalDiscoveredText(signal);
                 OnTimerFinish();
             }
             return true;
@@ -273,9 +274,16 @@ public class RadarGame : MonoBehaviour {
             innerRangeTimer -= Time.deltaTime;
     }
 
-    void ShowSignalDiscoveredText ()
+    void ShowSignalDiscoveredText (Signal signal)
     {
         signalDiscoveredText.SetActive(true);
+        if (signal.pointsToPosition)
+        {
+            signalDiscoveredText.transform.GetChild(1).gameObject.SetActive(true);
+        } else
+        {
+            signalDiscoveredText.transform.GetChild(1).gameObject.SetActive(false);
+        }
         StartCoroutine(WaitForSignalTimer());
     }
 
@@ -298,7 +306,6 @@ public class RadarGame : MonoBehaviour {
     void OnTimerFinish ()
     {
         ResetInnerRangeTimer();
-        ShowSignalDiscoveredText();
         HideTutorialIcons();
         signalDetectionSource.Play();
     }
