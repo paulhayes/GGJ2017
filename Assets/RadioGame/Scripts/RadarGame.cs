@@ -38,6 +38,10 @@ public class RadarGame : MonoBehaviour {
     [SerializeField]
     RectTransform timerSlider;
 
+    [Header("Other")]
+    [SerializeField]
+    GameObject tutorialIcons;
+
     float armAngle;
 
     float xAxis;
@@ -51,6 +55,9 @@ public class RadarGame : MonoBehaviour {
         {
             ShowTutorialIcons();
             isFirstTime = false;
+        } else
+        {
+            HideTutorialIcons();
         }
 
         if (PlayerShip.unlockedSignals == null) {
@@ -117,7 +124,12 @@ public class RadarGame : MonoBehaviour {
 
     void ShowTutorialIcons ()
     {
+        tutorialIcons.SetActive(true);
+    }
 
+    void HideTutorialIcons ()
+    {
+        tutorialIcons.SetActive(false);
     }
 
     void GetSignalStrengths()
@@ -287,6 +299,7 @@ public class RadarGame : MonoBehaviour {
     {
         ResetInnerRangeTimer();
         ShowSignalDiscoveredText();
+        HideTutorialIcons();
     }
 
     void SetTimerSliderSize ()
