@@ -79,9 +79,9 @@ public class PlayerShip : MonoBehaviour {
             steeringEmitters[i] = steeringThruster[i].emission;
         }
         for (int i = 0; i < mapItemMakers.Length; i++) {
-            if (unlockedSignals != null) {
-                mapItemMakers[i].enabled = unlockedSignals[i];
-
+            if (mapItemMakers[i] != null)
+            {
+                mapItemMakers[i].enabled = (unlockedSignals != null) ? unlockedSignals[i] : false;
             }
         }
 
@@ -94,6 +94,8 @@ public class PlayerShip : MonoBehaviour {
         else {
             for (int i = 0; i < collectableItems.Length; i++) {
                 collectableItems[i].SetActive(!itemsFound[i]);
+
+                //label off here
             }
         }
 
