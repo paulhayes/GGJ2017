@@ -93,7 +93,8 @@ public class PlayerShip : MonoBehaviour {
         }
         else {
             for (int i = 0; i < collectableItems.Length; i++) {
-                collectableItems[i].SetActive(!itemsFound[i]);
+                if(collectableItems[i]!=null)
+                    collectableItems[i].SetActive(!itemsFound[i]);
 
                 //label off here
             }
