@@ -14,7 +14,7 @@ public class RadarGame : MonoBehaviour {
     public AudioSource[] signalSources;
 
     [SerializeField]
-    AudioSource noiseSource;
+    AudioSource noiseSource, signalDetectionSource;
 
     [SerializeField]
     Sprite signalSprite;
@@ -300,6 +300,7 @@ public class RadarGame : MonoBehaviour {
         ResetInnerRangeTimer();
         ShowSignalDiscoveredText();
         HideTutorialIcons();
+        signalDetectionSource.Play();
     }
 
     void SetTimerSliderSize ()
