@@ -252,8 +252,15 @@ public class PlayerShip : MonoBehaviour {
                 collisionAudioSource.PlayOneShot(collectItemSound, 1f);
 
                 //check if all items are good
-                
+                bool allDone = true;
+                for(int i = 0; i < itemsFound.Length; i++)
+                {
+                    allDone &= itemsFound[i];
+                }
 
+                if (allDone) {
+                    SceneManager.LoadScene("GameOver");
+                }
 
             }
             else {
