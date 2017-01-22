@@ -193,11 +193,11 @@ public class PlayerShip : MonoBehaviour {
     {
         float mag = collision.relativeVelocity.magnitude;
         float mass = collision.collider.attachedRigidbody.mass;
-        Debug.Log(mag);
+        //Debug.Log(mag);
         for (int i = 0; i < collisionsSounds.Length; i++) {
             if (mass <= collisionsSounds[i].impactThreshold) {
                 collisionsSounds[i].lastIndex = (collisionsSounds[i].lastIndex + Random.Range(1, collisionsSounds[i].clips.Length-1) ) % collisionsSounds[i].clips.Length;
-                Debug.Log(collisionsSounds[i].clips[collisionsSounds[i].lastIndex].name);
+                //Debug.Log(collisionsSounds[i].clips[collisionsSounds[i].lastIndex].name);
                 collisionAudioSource.PlayOneShot(collisionsSounds[i].clips[collisionsSounds[i].lastIndex], 1f);
                 break;
             }

@@ -18,7 +18,9 @@ public class DebrisPool : MonoBehaviour {
         spawnedDebris = new GameObject[numDebris];
         Bounds box = spawnBox.bounds;
         spawnBox.transform.position = ship.transform.position;
-        Debug.LogFormat(":::>{0} {1}", box.center,spawnBox.transform.position);
+
+        // Didn't have time to include box.center in calculation as it was a bit off
+        //Debug.LogFormat(":::>{0} {1}", box.center,spawnBox.transform.position);
         
         for (int i = 0; i < numDebris; i++) {
             Vector3 pos = new Vector3(Random.Range(-box.extents.x, box.extents.x), Random.Range(-box.extents.y, box.extents.y), Random.Range(-box.extents.z, box.extents.z));

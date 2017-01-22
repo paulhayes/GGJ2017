@@ -80,6 +80,7 @@ public class RadarGame : MonoBehaviour {
             
             SetArmAngle();
             SetDetectorPos();
+            //ShowArm();
 
         } else
         {
@@ -175,7 +176,9 @@ public class RadarGame : MonoBehaviour {
         {
             if (innerRangeTimer <= 0)
             {
-                signal.discovered = true;
+                int index = System.Array.IndexOf<Signal>(signals, signal);
+                PlayerShip.unlockedSignals[index] = signal.discovered = true;
+                
                 OnTimerFinish();
             }
             return true;
