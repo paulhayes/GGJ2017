@@ -11,6 +11,8 @@ public class PlayerShip : MonoBehaviour {
     public static bool[] unlockedSignals;
     public static bool[] itemsFound;
 
+    public static bool firstSceneRun = true;
+
     public Camera mainCamera;
     public Transform playerCameras;
     public Transform mapCentrePosition;
@@ -25,6 +27,7 @@ public class PlayerShip : MonoBehaviour {
     public Camera uiMapCamera;
     public SpriteRenderer[] mapItemMakers;
     public GameObject[] collectableItems;
+    public GameObject gameHint;
 
     [System.Serializable]
     public class CollisionSound {
@@ -35,6 +38,7 @@ public class PlayerShip : MonoBehaviour {
     }
 
     public CollisionSound[] collisionsSounds;
+    public AudioClip collectItemSound;
 
     public float zoomInPos = 0;
     public float zoomOutPos = 2000;
@@ -58,6 +62,15 @@ public class PlayerShip : MonoBehaviour {
     bool zooming;
 
     void Start () {
+
+        gameHint.SetActive(firstSceneRun);
+        if (firstSceneRun)
+        {
+            firstSceneRun = false;
+        }
+        
+
+
         uiMapCamera.enabled = mapMode;
         transform.position = position;
         transform.rotation = Quaternion.Euler(0, rotation, 0);
@@ -236,11 +249,18 @@ public class PlayerShip : MonoBehaviour {
             int index = System.Array.IndexOf<GameObject>(collectableItems, other.gameObject);
             if (index >= 0) {
                 itemsFound[index] = true;
+                collisionAudioSource.PlayOneShot(collectItemSound, 1f);
+
+                //check if all items are good
+                
+
+
             }
             else {
                 Debug.LogError("Item not found in list of collectable items");
             }
             Debug.Log("Item collected");
+
         }
     }
 
