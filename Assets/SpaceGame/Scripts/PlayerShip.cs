@@ -9,6 +9,7 @@ public class PlayerShip : MonoBehaviour {
     public static Vector3 position = new Vector3(0, -40, 0);
     public static float rotation = 0;
     public static bool[] unlockedSignals;
+    public static bool[] itemsFound;
 
     public Camera mainCamera;
     public Transform playerCameras;
@@ -22,7 +23,8 @@ public class PlayerShip : MonoBehaviour {
     public AudioSource thrustNoise;
     public AudioSource steeringNoise;
     public Camera uiMapCamera;
-
+    public SpriteRenderer[] mapItemMakers;
+    public GameObject[] collectableItems;
 
     [System.Serializable]
     public class CollisionSound {
@@ -76,6 +78,25 @@ public class PlayerShip : MonoBehaviour {
         for (int i = 0; i < steeringThruster.Length; i++) {
             steeringEmitters[i] = steeringThruster[i].emission;
         }
+        for (int i = 0; i < mapItemMakers.Length; i++) {
+            if (unlockedSignals != null) {
+                mapItemMakers[i].enabled = unlockedSignals[i];
+
+            }
+        }
+
+        if (itemsFound == null)
+        {
+            itemsFound = new bool[collectableItems.Length];
+
+
+        }
+        else {
+            for (int i = 0; i < collectableItems.Length; i++) {
+                collectableItems[i].SetActive(!itemsFound[i]);
+            }
+        }
+
 	}
 	
 	void Update () {
@@ -202,6 +223,21 @@ public class PlayerShip : MonoBehaviour {
                 break;
             }
 
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Item")) {
+            other.gameObject.SetActive(false);
+            int index = System.Array.IndexOf<GameObject>(collectableItems, other.gameObject);
+            if (index >= 0) {
+                itemsFound[index] = true;
+            }
+            else {
+                Debug.LogError("Item not found in list of collectable items");
+            }
+            Debug.Log("Item collected");
         }
     }
 
